@@ -25,21 +25,16 @@ grad = zeros(size(theta));
 %
 %       Each row of the resulting matrix will contain the value of the
 %       prediction for that example. You can make use of this to vectorize
-%       the cost function and gradient computations. 
-%
-%           grad = ( 1 / m ) * (sigmoid( X * theta ) - y )' * X;
-    newTheta = theta; 
-    newTheta(1) = 0;   % because we don't add anything for j = 0;
-    
-	term1 =  y' * log( sigmoid( X * newTheta ));
-	term2 = ( 1 - y )' * log( 1 - ( sigmoid( X * newTheta )));
-	lambdaCostTerm = ( lambda / ( 2 * m ) ) .* sum( newTheta .^ 2 )' ;
-	J = ( ( -1 / m ) * ( term1 + term2 )) + lambdaCostTerm;
+%       the cost function and gradient computations.
 
-	%grad(1)     = ( 1/m ) *  [sigmoid( X * newTheta) - y]' * X(:,1);
-	grad = ( 1/m ) * [[sigmoid( X * newTheta) - y]' * X] \
-                  + ((lambda / m) * newTheta');
-size(grad)
+J = ( ( -1/m ) \
+    * ( [ y'*log( sigmoid( X*theta )) ] \
+      + [( 1-y )' * log( 1-( sigmoid( X*theta )))] )) \
+    + [ ( lambda/( 2*m ) ) .* sum( theta( 2:end ) .^ 2 )' ];
+
+grad(1)     = ( 1/m ) *  [sigmoid( X*theta)-y]' * X(:,1);
+grad(2:end) = ( 1/m ) * [[sigmoid( X*theta)-y]' * X(:,2:end)] \
+                  + ((lambda / m) * theta(2:end, 1)');
 
 
 
