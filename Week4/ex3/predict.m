@@ -21,10 +21,20 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
+XWithBias = ones( size( X,1 ), size( X, 2 )+1 );
+XWithBias(:,2:end) = X;
+%fprintf("XWithBias => [%i, %i]\n", size(XWithBias) )
 
-
-
-
+zTwo = XWithBias * Theta1';
+%fprintf("zTwo => [%i, %i]\n", size(zTwo) )
+aTwo = ones( size( X, 1 ), size( Theta1, 1 ) + 1 );
+%fprintf("aTwo => [%i, %i]\n", size(aTwo) )
+aTwo(:,2:end) = sigmoid( zTwo);
+zThree = aTwo * Theta2';
+aThree = sigmoid ( zThree );
+%fprintf("aThree => [%i, %i]\n", size(aThree) )
+[val, index] = max(aThree,[] , 2 );
+p = index;
 
 
 
