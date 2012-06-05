@@ -28,7 +28,9 @@ m = size(X, 1);
 % You need to return the following variables correctly 
 J = 0;
 Theta1_grad = zeros(size(Theta1));
+fprintf("Theta1 %i x %i\n",size(Theta1))
 Theta2_grad = zeros(size(Theta2));
+fprintf("Theta2 %i x %i\n",size(Theta2))
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: You should complete the code by working through the
@@ -38,7 +40,44 @@ Theta2_grad = zeros(size(Theta2));
 %         variable J. After implementing Part 1, you can verify that your
 %         cost function computation is correct by verifying the cost
 %         computed in ex4.m
-%
+% forward propagate
+%a_1 =    % dont forget to add bias unit column! should be (5000 x 401)
+%z_2 =    % (5000 x 25)
+%a_2 =    % (5000 x 26)
+%a_2 = ones(m, 
+%z_3 =    % (5000 x 10)
+%a_3 =    % = H_theta (5000 x 10)
+
+
+a_1 = ones(m, size( X, 2 ) + 1);
+a_1(:,2:end) = X;
+z_2 = a_1 * Theta1';
+fprintf("z_2 %i x %i\n",size(z_2))
+a_2 = ones(m, size( a_1, 2 ) + 1 );
+fprintf("a_2 %i x %i\n",size(a_2))
+
+a_2(:,2:end) = sigmoid(z_2);
+
+z_3 = a_2 * Theta2';
+a_3 = sigmoid(z_3);
+fprintf("a_3 %i x %i\n",size(a_3))
+
+%You need these matrices for both cost function and backprop.
+
+% unroll y
+%y=   % calculate y (5000 x 10) (can be done with repmat and ==)
+
+% cost function
+%J=  % (1 x 1) calculate in matrix form then use a double sum
+
+% back propagate
+%delta_3= % (5000 x 10)
+% calculate delta_2 in 2 parts (because you have to remove the bias column)
+%delta_2= % (5000 x 26)
+%delta_2= % (5000 x 25)
+%Theta1_grad= % (25 x 401)
+%Theta2_grad= % (10 x 26)
+    
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad. You should return the partial derivatives of
 %         the cost function with respect to Theta1 and Theta2 in Theta1_grad and
