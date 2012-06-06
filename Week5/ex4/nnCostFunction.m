@@ -49,18 +49,19 @@ fprintf("Theta2 %i x %i\n",size(Theta2))
 %a_3 =    % = H_theta (5000 x 10)
 
 
-a_1 = ones(m, size( X, 2 ) + 1);
-a_1(:,2:end) = X;
-z_2 = a_1 * Theta1';
-fprintf("z_2 %i x %i\n",size(z_2))
-a_2 = ones(m, size( a_1, 2 ) + 1 );
-fprintf("a_2 %i x %i\n",size(a_2))
+%a_1 = ones(m, size( X, 2 ) + 1);
+%a_1(:,2:end) = X;
 
-a_2(:,2:end) = sigmoid(z_2);
+%z_2 = a_1 * Theta1';
+%fprintf("z_2 %i x %i\n",size(z_2))
+%a_2 = ones(m, size( Theta1, 1 ) + 1 );
+%fprintf("a_2 %i x %i\n",size(a_2))
+%a_2(:,2:end) = sigmoid(z_2);
 
-z_3 = a_2 * Theta2';
-a_3 = sigmoid(z_3);
-fprintf("a_3 %i x %i\n",size(a_3))
+%z_3 = a_2 * Theta2';
+%a_3 = ones(m, size( Theta2,1 ) + 1);
+%a_3(:,2:end) = sigmoid(z_3);
+%fprintf("a_3 %i x %i\n",size(a_3))
 
 %You need these matrices for both cost function and backprop.
 
@@ -102,8 +103,48 @@ fprintf("a_3 %i x %i\n",size(a_3))
 %
 
 
-
-
+yy = zeros(size(y),num_labels);
+for i=1:size(X)
+  yy(i,y(i)) = 1;
+end
+ 
+X = [ones(m,1) X];
+% cost
+for  i=1:m
+  a1 = X(i,:);
+  z2 = Theta1*a1';
+  a2 = sigmoid(z2);
+  z3 = Theta2*[1; a2];
+  a3 = sigmoid(z3);
+ 
+  J += -yy(i,:)*log(a3)-(1-yy(i,:))*log(1-a3);
+end
+ 
+J /= m;
+ 
+J += (lambda/(2*m))*(sum(sum(Theta1(:,2:end).^2))+sum(sum(Theta2(:,2:end).^2)));
+ 
+t=1;
+for t=1:m
+  % forward pass
+  a1 = X(t,:);
+  z2 = Theta1*a1';
+  a2 = [1; sigmoid(z2)];
+  z3 = Theta2*a2;
+  a3 = sigmoid(z3);
+ 
+  % backprop
+  delta3 = a3-yy(t,:)';
+  delta2 = (Theta2'*delta3).*[1; sigmoidGradient(z2)];
+  delta2 = delta2(2:end);
+ 
+  Theta1_grad = Theta1_grad + delta2*a1;
+  Theta2_grad = Theta2_grad + delta3*a2';
+end
+ 
+Theta1_grad = (1/m)*Theta1_grad+(lambda/m)*[zeros(size(Theta1, 1), 1) Theta1(:,2:end)];
+Theta2_grad = (1/m)*Theta2_grad+(lambda/m)*[zeros(size(Theta2, 1), 1) Theta2(:,2:end)];
+ 
 
 
 
