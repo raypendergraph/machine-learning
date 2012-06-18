@@ -20,7 +20,10 @@ m = size(X, 1);
 % You need to return these values correctly
 error_train = zeros(m, 1);
 error_val   = zeros(m, 1);
-
+fprintf("X [%i, %i]\n", size(X));
+fprintf("y [%i, %i]\n", size(y));
+fprintf("Xval [%i, %i]\n", size(Xval));
+fprintf("yval [%i, %i]\n", size(yval));
 % ====================== YOUR CODE HERE ======================
 % Instructions: Fill in this function to return training errors in 
 %               error_train and the cross validation errors in error_val. 
@@ -52,14 +55,16 @@ error_val   = zeros(m, 1);
 %
 
 % ---------------------- Sample Solution ----------------------
-
-
-
-
-
+error_val = zeros(size(Xval,1),1);
+theta = trainLinearReg(X, y, lambda); 
+error_train(1:m,:) = 1/(2*m) * (sum( (X*theta)  - y ) .^ 2);
+lambdaCostTerm = ( lambda / ( 2 * size(Xval,1) ) ) .* sum( theta( 2 : end ) .^ 2 )';
+error_val(1:size(Xval,1)) = 1/(2*size(Xval,1)) * (sum( (Xval*theta)  - yval ) .^ 2) + lambdaCostTerm;
 
 
 % -------------------------------------------------------------
+
+
 
 % =========================================================================
 
