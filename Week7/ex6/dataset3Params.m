@@ -23,6 +23,26 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+cValues = [0.01 0.03 0.1 0.3 1 3 10 30];
+sigmaValues = [0.01 0.03 0.1 0.3 1 3 10 30];
+
+predictionThreshold = 5000;
+
+for cIndex = 1:length(cValues), _c = cValues(cIndex)
+    
+    for sigmaIndex = 1:length(sigmaValues), _sigma = sigmaValues(sigmaIndex)
+        model = svmTrain(X, y, _c, @(x1, x2) gaussianKernel(x1, x2, _sigma));
+        predictions = svmPredict(model, Xval);
+        predictionError = mean( double( predictions ~= yval ));
+        
+        if predictionError < predictionThreshold
+            predictionThreshold = predictionError;
+            C = _c;
+            sigma = _sigma;
+        end
+        
+    end
+end
 
 
 
