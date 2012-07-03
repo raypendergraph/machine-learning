@@ -26,12 +26,16 @@ centroids = zeros(K, n);
 % Note: You can use a for-loop over the centroids to compute this.
 %
 
+centroidAccumulation = zeros(K, 1 + n);
 
+for xIndex = 1:m
+    ci = idx( xIndex );
+    
+    centroidAccumulation( ci, 1 ) += 1;
+    centroidAccumulation( ci, 2:end) += X( xIndex, : ); 
+end
 
-
-
-
-
+centroids = centroidAccumulation(:, 2:end ) ./ centroidAccumulation( :, 1 );
 
 % =============================================================
 

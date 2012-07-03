@@ -21,10 +21,10 @@ idx = zeros(size(X,1), 1);
 % Note: You can use a for-loop over the examples to compute this.
 %
 
-
-
-
-
+for xIndex = 1:size( X, 1 ) 
+    [x, ix] = min( norm( X( xIndex, : ) - centroids, 2, "rows") .^ 2);
+    idx( xIndex ) = ix;   
+end 
 
 
 % =============================================================
